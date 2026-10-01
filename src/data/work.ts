@@ -10,8 +10,8 @@ export interface WorkItem {
   end?: number | 'now';
   /** One line. The first thing shown when the row opens. */
   summary: string;
-  /** Conversational. The problem, why it matters, what this does about it, and what came of it. */
-  story: string;
+  /** Conversational paragraphs. Each string is its own block in the open row. */
+  story: string[];
   links: SiteLink[];
 }
 
@@ -28,13 +28,16 @@ export const work: WorkItem[] = [
   {
     id: 'agentconnect',
     title: 'AgentConnect',
-    tags: ['Multi-agent systems', 'Runtime', 'Open source'],
+    tags: ['Agents', 'Distributed systems', 'Infrastructure'],
     start: 2025,
     end: 'now',
     summary:
-      'A messaging runtime so independently built agents can work as one team.',
-    story:
-      'Most agents only talk easily to others built the same way. AgentConnect lets them join as peers, keep their own models, tools, and memory, and still find teammates, send work, and wait for answers. The runtime keeps the directory, delivers messages, tracks outstanding work, and holds shared conversation history. It won a Coinbase Builder Grant as one of four projects worldwide.',
+      'A runtime for any agents to form teams and work with other teams, locally or remotely.',
+    story: [
+      'Agents are getting good on their own, but getting independently built agents to work together is still messy. Different frameworks have their own tools, memory, and ways of communicating.',
+      'AgentConnect gives them a common runtime instead. An agent keeps whatever model, tools, or harness it already uses, but can still discover other agents, send them work, keep conversations going, and wait for results.',
+      'Agents can run in the same process or across machines over HTTP. They can also connect through MCP, and even an entire multi-agent system can show up as one agent and work with another team.',
+    ],
     links: [
       { label: 'Repository', href: repo('AgentConnect') },
       { label: 'Docs', href: 'https://akki0511.github.io/AgentConnect/' },
@@ -47,12 +50,16 @@ export const work: WorkItem[] = [
   {
     id: 'living-matter',
     title: 'Living Matter',
-    tags: ['Browser game', '3D', 'Interactive art'],
+    tags: ['AI environments', '3D simulation', 'Real-time AI'],
     start: 2026,
     summary:
-      'A 3D world where living matter builds a path around how you move.',
-    story:
-      'Most 3D pages are either a game with a fixed course or a scene you only look at. Living Matter is a flooded observatory. You walk the limestone, turn toward open water, and one body of 512 pieces gathers into steps, bridges, and platforms, recycling as you go without pulling occupied support. Preview needs no key. Live mode asks Jev to pick the next legal move.',
+      'A 3D world that understands your intent and adapts around you.',
+    story: [
+      'Most AI interfaces start with you telling a machine exactly what you want. I wanted to try the opposite.',
+      'In Living Matter, you just move through the world. TypeSafe’s Jev System One model acts as its brain, watching your movement and deciding how a body of 512 pieces should reorganize into steps, bridges, and platforms around you.',
+      'The model still has to act within the world’s physical rules, so it cannot just generate anything it wants.',
+      'It is basically an experiment in machines learning how to help by watching us instead of waiting for a prompt.',
+    ],
     links: [
       { label: 'Play', href: 'https://livingmatter.vercel.app' },
       { label: 'Repository', href: repo('living-matter') },
@@ -61,12 +68,16 @@ export const work: WorkItem[] = [
   {
     id: 'quanttradeai',
     title: 'QuantTradeAI',
-    tags: ['Coding agents', 'Quant finance', 'Backtesting'],
+    tags: ['Coding agents', 'Quant finance', 'Research'],
     start: 2025,
     end: 2026,
-    summary: 'A quant research lab built for coding agents.',
-    story:
-      'Ask a coding agent to research a trading strategy and it tends to write a fresh pile of scripts. Results scatter, runs are hard to compare, and the next session starts from zero. QuantTradeAI gives the agent one project file and a CLI for the whole loop, with the same artifacts every run, so it can rank what worked. Nothing trades live until a human signs off.',
+    summary: 'A quant research lab where coding agents run, compare, and improve trading experiments.',
+    story: [
+      'Coding agents can write a backtest pretty easily. The annoying part is everything after that.',
+      'Each experiment usually ends up with different scripts, folders, metrics, and outputs, so comparing runs gets messy and the next session starts from scratch.',
+      'QuantTradeAI gives coding agents like Claude Code, Codex, or Cursor one structured research environment. A YAML project file and CLI drive backtests, parameter sweeps, comparisons, and machine-readable artifacts that the next experiment can build on.',
+      'Strategies move from backtest to paper to live through explicit gates, so agents can experiment without getting control of real money by default.',
+    ],
     links: [
       { label: 'Docs', href: 'https://akkijoshi.gitbook.io/quanttradeai' },
       { label: 'Repository', href: repo('QuantTradeAI') },
@@ -75,23 +86,29 @@ export const work: WorkItem[] = [
   {
     id: 'soundsight',
     title: 'SoundSight',
-    tags: ['Accessibility', 'On-device AI', 'Audio'],
+    tags: ['Accessibility', 'Audio AI', 'Edge AI'],
     start: 2026,
     summary:
-      'Local AI that turns important sounds into visual alerts for Deaf and hard-of-hearing people.',
-    story:
-      'If you’re Deaf or hard of hearing, a smoke alarm, a doorbell, or someone calling your name can go by without you ever knowing. Streaming that audio to a cloud service is slow and hard to trust. SoundSight runs Gemma 4 locally through Cactus, listens for the sounds that matter, and turns them into visual alerts as they happen. The audio stays on your machine, and a demo mode with recorded clips lets anyone try it without a microphone.',
+      'On-device AI that turns important sounds into visual alerts for people who cannot hear them.',
+    story: [
+      'A lot of everyday information only exists as sound. A smoke alarm, doorbell, someone calling your name, or something breaking nearby can be easy to miss if you are Deaf or hard of hearing.',
+      'SoundSight listens for those sounds and turns them into visual alerts as they happen.',
+      'It runs Gemma 4 locally on the device through Cactus, so the audio does not need to be continuously sent to a cloud model. That keeps the system responsive while something as personal as the sounds around you stays on your own machine.',
+    ],
     links: [{ label: 'Repository', href: repo('SoundSight') }],
   },
   {
     id: 'smallbizpal',
     title: 'SmallBizPal',
-    tags: ['AI agents', 'Small business', 'Google ADK'],
+    tags: ['AI agents', 'Automation', 'Small business'],
     start: 2025,
     summary:
-      'A team of AI agents that handles marketing, customer questions, and reporting for a small business.',
-    story:
-      'A small business owner is usually the marketing team, the support desk, and the analyst at once. An AI chat widget could help, but wiring one up normally means handing it private data and hoping none of it reaches a customer. SmallBizPal splits the job across agents. One learns the business by asking the owner questions, others write marketing and reports, and a public agent talks to visitors. That public agent only ever sees a sanitized slice of the business.',
+      'A team of AI agents that helps run the repetitive parts of a small business.',
+    story: [
+      'Small business owners end up doing everything themselves. Marketing, customer questions, reporting, and keeping basic business information up to date all compete for the same person’s time.',
+      'SmallBizPal splits that work across a team of agents built with Google’s Agent Development Kit. One learns about the business from the owner, others handle things like content and reports, and a public-facing agent can answer customer questions.',
+      'The agents can use external tools through MCP, while the public agent only gets a sanitized view of the business instead of access to everything the owner has shared.',
+    ],
     links: [
       { label: 'Live demo', href: 'https://smallbizpal.vercel.app/' },
       { label: 'Video', href: 'https://youtu.be/thGJiX9AYbk' },

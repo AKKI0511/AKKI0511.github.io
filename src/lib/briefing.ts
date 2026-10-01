@@ -89,8 +89,7 @@ export async function createBriefing(origin: URL): Promise<string> {
       '',
       item.summary,
       '',
-      item.story,
-      '',
+      ...item.story.flatMap((paragraph) => [paragraph, '']),
       ...item.links.map((link) => `- ${link.label}: ${link.href}`),
     );
   }

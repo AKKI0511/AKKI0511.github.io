@@ -25,7 +25,7 @@ A project row has two levels. Collapsed, it shows the title, the year range, and
 ## Content rules
 
 - Write in Akshat’s voice. Keep it short, direct, and conversational. No slogans, em dashes, emoji, or colons used for effect in prose.
-- A project `summary` is one line that sells it. A `story` explains, in plain conversational sentences, the problem, the solution, the impact, and a global win when there is one. No resume metrics, throughput numbers, or architecture diagrams in prose. Assume the reader has never heard of the domain.
+- A project `summary` is one line that sells it. A `story` is an array of paragraphs. Each string is its own block in the open row, so add another string to break. Keep it conversational. No resume metrics, throughput numbers, or architecture diagrams in prose. Assume the reader has never heard of the domain.
 - AgentConnect copy describes the Team runtime (v0.5): independently built agents joining as peers, a directory, messaging, outstanding work, and shared conversation history. Do not describe the old Agent / Registry / Hub chain.
 - Verosek is a layer between apps and AI agents that routes, scans, and audits requests. It is not only a gateway between agents and tools.
 - `tags` name the domain for a cold reader. Two to three short tags.

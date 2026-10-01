@@ -21,7 +21,9 @@ const active = isActive(item);
     </summary>
     <div class="detail">
       <p class="summary">{item.summary}</p>
-      <p>{item.story}</p>
+      {item.story.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
       <ul class="links">
         {item.links.map((link) => (
           <li>

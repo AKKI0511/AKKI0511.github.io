@@ -8,22 +8,22 @@ const email = 'akkijoshi0511@gmail.com';
 export const site = {
   name: 'Akshat Joshi',
   description:
-    'Akshat Joshi builds AI infrastructure for agents, runtimes, and environments for models.',
+    'Akshat Joshi builds infrastructure for AI agents, including runtimes, multi-agent systems, and training environments.',
   intro:
-    'I invent and build AI infra, mostly around agents, runtimes, and environments for models.',
+    'I build infrastructure for AI agents, from runtimes to training environments.',
   // Label and value pairs under the intro. The first row is live and carries the signal dot.
   presence: [
     {
       label: 'Now',
-      text: 'Founding engineer at Verosek, a security gateway between apps and AI agents.',
+      text: 'Founding engineer at Verosek, building security infrastructure for AI agents.',
     },
     {
       label: 'Building',
-      text: 'AgentConnect, a universal messaging runtime for agents to work with other agents.',
+      text: 'AgentConnect, a runtime for agents to form teams across frameworks and machines.',
     },
     {
       label: 'Research',
-      text: 'RL environments and benchmarks that train models to build better agents.',
+      text: 'RL environments and benchmarks for training models to build better agents.',
     },
   ],
   email,
@@ -39,7 +39,7 @@ export const site = {
   about: {
     story: [
       'I started out at IIT Madras studying naval architecture and ocean engineering, then moved to Toronto and switched to computer science at York University.',
-      'I’m a heavy coding-agent user. I usually have teams of agents working across multiple projects at the same time. Competitive programming is a big part of my background. Top 0.5% globally on LeetCode and Expert on Codeforces.',
+      'I usually have a few coding agents working across different projects at once. Competitive programming has also been a big part of my background. Top 0.5% globally on LeetCode and Expert on Codeforces.',
       'Outside work, I spend a lot of time in the gym and on X, where I post whatever I’m building, believing, or overthinking that day.',
     ],
   },
