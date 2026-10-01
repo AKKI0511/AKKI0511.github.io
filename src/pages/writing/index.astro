@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WritingRow from '../../components/WritingRow.astro';
+import { site } from '../../data/site';
+import { getWriting } from '../../lib/writing';
+const copy = site.pages.writing;
+const writing = await getWriting();
+const years = Map.groupBy(writing, (entry) =>
+  entry.data.publishedAt.getUTCFullYear(),
+);
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <div class="page">
+    <section class="index listing" aria-labelledby="title">
+      <h1 id="title">{copy.title}</h1>
+      {[...years].map(([year, entries]) => (
+        <>
+          <h2 class="hang meta year">{year}</h2>
+          <ul class="year-list">
+            {entries.map((entry) => (
+              <WritingRow entry={entry} />
+            ))}
+          </ul>
+        </>
+      ))}
+      <a class="label-link rss" href="/rss.xml">
+        RSS
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .listing {
+    padding-top: var(--space-8);
+  }
+  h1 {
+    font-size: var(--type-title);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .year,
+  .year-list {
+    margin-top: var(--space-6);
+  }
+  .year {
+    padding-top: calc(var(--space-4) + 0.2em);
+    font-weight: 400;
+    color: var(--text-2);
+  }
+  .rss {
+    justify-self: start;
+    margin-top: var(--space-5);
+  }
+  @media (max-width: 760px) {
+    .year {
+      padding-top: 0;
+    }
+    .year-list {
+      margin-top: 0;
+    }
+  }
+</style>

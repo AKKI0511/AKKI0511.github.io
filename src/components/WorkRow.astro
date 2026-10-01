@@ -1,0 +1,105 @@
+---
+import { site } from '../data/site';
+import { isActive, workYears, type WorkItem } from '../data/work';
+interface Props {
+  item: WorkItem;
+}
+const { item } = Astro.props;
+const active = isActive(item);
+---
+
+<li>
+  <details class="work" id={item.id}>
+    <summary>
+      <span class="title">{item.title}</span>
+      <span class="meta aside">
+        {workYears(item)}
+        {active && <span class="sr-only">{site.labels.active}</span>}
+        <span class="toggle" aria-hidden="true"></span>
+      </span>
+      <span class="tags meta">{item.tags.join(' · ')}</span>
+    </summary>
+    <div class="detail">
+      <p class="summary">{item.summary}</p>
+      <p>{item.story}</p>
+      <ul class="links">
+        {item.links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </details>
+</li>
+<style>
+  summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .title {
+    font-size: var(--type-item);
+    line-height: 1.35;
+    font-weight: 500;
+  }
+  .aside {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .toggle {
+    margin-left: var(--space-2);
+  }
+  .toggle::before {
+    content: '+';
+    display: inline-block;
+    width: 1ch;
+    text-align: center;
+  }
+  [open] .toggle::before {
+    content: '−';
+  }
+  .tags {
+    grid-column: 1 / -1;
+    margin-top: var(--space-1);
+    color: var(--text-2);
+  }
+  .detail {
+    padding-bottom: var(--space-5);
+    color: var(--text-2);
+    max-width: 34rem;
+  }
+  .detail > * + * {
+    margin-top: var(--space-3);
+  }
+  .detail .summary {
+    color: var(--text);
+  }
+  @media (max-width: 760px) {
+    .tags {
+      font-size: 0.75rem;
+    }
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-5);
+  }
+  .detail .links {
+    margin-top: var(--space-1);
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    color: var(--text);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkRow from '../components/WorkRow.astro';
+import { site } from '../data/site';
+import { earlier, work } from '../data/work';
+const copy = site.pages.work;
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <div class="page">
+    <section class="index listing" aria-labelledby="title">
+      <h1 id="title">{copy.title}</h1>
+      <ul class="rows">
+        {work.map((item) => (
+          <WorkRow item={item} />
+        ))}
+      </ul>
+      <h2 class="hang meta earlier-label">{site.labels.earlier}</h2>
+      <ul class="earlier">
+        {earlier.map((item) => (
+          <li>
+            <a href={item.href}>{item.title}</a>
+            <span class="meta">{item.year}</span>
+            <p>{item.summary}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .listing {
+    padding-top: var(--space-8);
+  }
+  h1 {
+    font-size: var(--type-title);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .rows {
+    margin-top: var(--space-5);
+  }
+  .earlier-label,
+  .earlier {
+    margin-top: var(--space-7);
+  }
+  .earlier-label {
+    padding-top: 0.2em;
+    font-weight: 400;
+    color: var(--text-2);
+  }
+  .earlier li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    align-items: baseline;
+    padding-bottom: var(--space-3);
+  }
+  .earlier a {
+    font-weight: 500;
+  }
+  .earlier p {
+    grid-column: 1;
+    color: var(--text-2);
+    font-size: var(--type-small);
+  }
+  @media (max-width: 760px) {
+    .earlier {
+      margin-top: var(--space-2);
+    }
+  }
+</style>

@@ -1,0 +1,54 @@
+:root {
+  color-scheme: dark;
+
+  /* Material. Neutral carbon, no hue identity. Depth comes from lightness only. */
+  --bg: oklch(0.165 0.002 90);
+  --bg-raised: oklch(0.205 0.002 90);
+  --line: oklch(0.36 0.002 90);
+
+  /* Text. Bone, never pure white. Three steps carry all hierarchy. */
+  --text: oklch(0.935 0.004 90);
+  --text-2: oklch(0.77 0.003 90);
+  --text-3: oklch(0.64 0.003 90);
+
+  /* Signal. The only colour on the site. It marks live work and nothing else. */
+  --signal: oklch(0.67 0.19 33);
+
+  --focus: var(--text);
+
+  /* Glass, for the few controls that float above content. */
+  --glass: oklch(0.23 0.003 90 / 0.62);
+  --glass-edge: oklch(1 0 0 / 0.09);
+
+  --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+  --font-mono: 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace;
+
+  --type-name: clamp(3rem, 1.9rem + 3.2vw, 4.75rem);
+  --type-title: clamp(2.5rem, 1.8rem + 2.2vw, 3.75rem);
+  --type-lead: clamp(1.1875rem, 1.1rem + 0.3vw, 1.3125rem);
+  --type-item: 1.1875rem;
+  --type-body: 1.0625rem;
+  --type-small: 0.9375rem;
+  --type-meta: 0.8125rem;
+  --type-micro: 4px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  /* Layout. One reading column with a hanging margin for years and labels. */
+  --gutter: clamp(1.25rem, 5.5vw, 5.5rem);
+  --margin-col: 9.5rem;
+  --measure: 38rem;
+  --prose-measure: 40rem;
+
+  --touch: 44px;
+  --motion: 180ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

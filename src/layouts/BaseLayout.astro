@@ -1,0 +1,130 @@
+---
+import '../styles/fonts.css';
+import '../styles/global.css';
+import { site } from '../data/site';
+import sansFont from '@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2?url';
+import monoFont from '@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-wght-normal.woff2?url';
+interface Props {
+  title?: string;
+  description?: string;
+  article?: boolean;
+  noIndex?: boolean;
+}
+const {
+  title,
+  description = site.description,
+  article = false,
+  noIndex = false,
+} = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const pageTitle = title ? `${title} · ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const isLocal = ['localhost', '127.0.0.1'].includes(canonical.hostname);
+const year = new Date().getUTCFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#131313" />
+    <link
+      rel="preload"
+      href={sansFont}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={monoFont}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {(isLocal || noIndex) && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name} · Writing`}
+      href="/rss.xml"
+    />
+    <link
+      rel="alternate"
+      type="text/markdown"
+      title="This site as Markdown for language models"
+      href="/llms-full.txt"
+    />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/social.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.description} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    {!isHome && (
+      <header class="page">
+        <div class="index">
+          <a class="hang home" href="/">
+            {site.labels.home}
+          </a>
+        </div>
+      </header>
+    )}
+    <main id="main">
+      <slot />
+    </main>
+    <footer class:list={['page', 'site-footer', { 'with-dock': article }]}>
+      <div class="index">
+        <div class="footer-row meta">
+          <span>
+            {site.name}, {year}
+          </span>
+          <a href="/rss.xml">RSS</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+<style>
+  header {
+    padding-top: var(--space-6);
+  }
+  .home {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .site-footer {
+    padding-top: var(--space-9);
+    padding-bottom: var(--space-5);
+  }
+  .with-dock {
+    padding-bottom: 6rem;
+  }
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-row a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    text-decoration: none;
+  }
+</style>

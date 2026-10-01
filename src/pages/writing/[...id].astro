@@ -1,0 +1,117 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReadingDock from '../../components/ReadingDock.astro';
+import { site } from '../../data/site';
+import {
+  formatDate,
+  getHostedWriting,
+  readingMinutes,
+  writingHref,
+} from '../../lib/writing';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const hosted = await getHostedWriting();
+  return hosted.map((entry, index) => ({
+    params: { id: entry.id },
+    props: { entry, newer: hosted[index - 1], older: hosted[index + 1] },
+  }));
+}
+const { entry, newer, older } = Astro.props;
+const { Content, headings } = await render(entry);
+const { title, description, publishedAt, updatedAt, example } = entry.data;
+---
+
+<BaseLayout title={title} description={description} article noIndex={example}>
+  <article class="page">
+    <div class="index article">
+      <header class="head">
+        <p class="meta">
+          {example ? site.labels.example : formatDate(publishedAt)}
+          <span aria-hidden="true"> · </span>
+          {readingMinutes(entry.body)} min
+          {updatedAt && !example && (
+            <>
+              <span aria-hidden="true"> · </span>
+              Updated {formatDate(updatedAt)}
+            </>
+          )}
+        </p>
+        <h1>{title}</h1>
+        <p class="deck">{description}</p>
+        {example && (
+          <p class="notice">
+            Placeholder text for reviewing the reading layout. Not written by
+            Akshat.
+          </p>
+        )}
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+      <nav class="after" aria-label="More writing">
+        {older && (
+          <a href={writingHref(older)} class="step">
+            <span class="meta">Previous</span>
+            {older.data.title}
+          </a>
+        )}
+        {newer && (
+          <a href={writingHref(newer)} class="step">
+            <span class="meta">Next</span>
+            {newer.data.title}
+          </a>
+        )}
+        <a href="/writing/" class="label-link">
+          {site.labels.allWriting}
+        </a>
+      </nav>
+    </div>
+  </article>
+  <ReadingDock headings={headings} />
+</BaseLayout>
+<style>
+  .article {
+    padding-top: var(--space-8);
+  }
+  .head {
+    margin-bottom: var(--space-7);
+  }
+  h1 {
+    margin-top: var(--space-3);
+    font-size: var(--type-title);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .deck {
+    margin-top: var(--space-4);
+    font-size: var(--type-lead);
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  .notice {
+    margin-top: var(--space-5);
+    font-size: var(--type-small);
+    color: var(--text-3);
+  }
+  .after {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+  .step {
+    display: grid;
+    gap: var(--space-1);
+    font-weight: 500;
+  }
+  .step .meta {
+    font-weight: 400;
+  }
+  .label-link {
+    justify-self: start;
+  }
+</style>

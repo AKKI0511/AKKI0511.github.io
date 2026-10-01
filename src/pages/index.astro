@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkRow from '../components/WorkRow.astro';
+import WritingRow from '../components/WritingRow.astro';
+import Ping from '../components/Ping.astro';
+import { site } from '../data/site';
+import { earlier, work } from '../data/work';
+import { getWriting } from '../lib/writing';
+
+const HOME_WRITING = 5;
+const writing = await getWriting();
+const shownWriting = writing.slice(0, HOME_WRITING);
+---
+
+<BaseLayout>
+  <div class="page home">
+    <section class="index intro" aria-labelledby="name">
+      <h1 id="name">{site.name}</h1>
+      <p class="lead">{site.intro}</p>
+      <dl class="presence">
+        {site.presence.map((row, index) => (
+          <div class:list={['row', { live: index === 0 }]}>
+            <dt class="meta">
+              {index === 0 && <Ping />}
+              {row.label}
+            </dt>
+            <dd>{row.text}</dd>
+          </div>
+        ))}
+      </dl>
+      <ul class="links" aria-label="Elsewhere">
+        {site.links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              rel={link.href.startsWith('mailto:') ? undefined : 'me'}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="index block" aria-labelledby="work">
+      <h2 class="hang meta" id="work">
+        {site.labels.work}
+      </h2>
+      <ul>
+        {work.map((item) => (
+          <WorkRow item={item} />
+        ))}
+      </ul>
+      {earlier.length > 0 && (
+        <a class="label-link more" href="/work/">
+          {site.labels.allWork}
+        </a>
+      )}
+    </section>
+
+    <section class="index block" aria-labelledby="writing">
+      <h2 class="hang meta" id="writing">
+        {site.labels.writing}
+      </h2>
+      <ul>
+        {shownWriting.map((entry) => (
+          <WritingRow entry={entry} />
+        ))}
+      </ul>
+      {writing.length > shownWriting.length && (
+        <a class="label-link more" href="/writing/">
+          {site.labels.allWriting}
+        </a>
+      )}
+    </section>
+
+    <section class="index block" aria-labelledby="about">
+      <h2 class="hang meta" id="about">
+        {site.labels.about}
+      </h2>
+      <div class="story">
+        {site.about.story.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .intro {
+    padding-top: clamp(3.5rem, 12vh, 7rem);
+  }
+  h1 {
+    font-size: var(--type-name);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+  }
+  .lead {
+    margin-top: var(--space-5);
+    font-size: var(--type-lead);
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 34rem;
+    text-wrap: pretty;
+  }
+  /* Presence. Labels hang in the margin, values align with everything else. */
+  .presence {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    row-gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .presence .row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+  .presence dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-2);
+  }
+  .presence dd {
+    margin: 0;
+    color: var(--text-2);
+    max-width: 34rem;
+  }
+  .presence .live dd {
+    color: var(--text);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-5);
+    margin-top: var(--space-4);
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+  }
+  .block {
+    margin-top: var(--space-7);
+  }
+  .block > h2 {
+    padding-top: calc(var(--space-4) + 0.2em);
+    font-weight: 400;
+    color: var(--text-2);
+  }
+  .more {
+    justify-self: start;
+  }
+  .story {
+    padding-top: var(--space-4);
+    color: var(--text-2);
+    max-width: 34rem;
+  }
+  .story p + p {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 760px) {
+    .intro {
+      padding-top: var(--space-8);
+    }
+    .presence,
+    .presence .row {
+      grid-template-columns: 6.25rem minmax(0, 1fr);
+    }
+    .presence {
+      row-gap: var(--space-4);
+    }
+    .block > h2 {
+      padding-top: 0;
+    }
+    .story {
+      padding-top: var(--space-2);
+    }
+  }
+</style>

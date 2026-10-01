@@ -1,0 +1,177 @@
+---
+import { site } from '../data/site';
+import { createBriefing, createIndex } from '../lib/briefing';
+import { assistantLinks } from '../lib/ask';
+const copy = site.ping;
+const briefing = await createBriefing(Astro.site!);
+const ask = assistantLinks(
+  copy.question,
+  await createIndex(Astro.site!),
+  new URL('/llms.txt', Astro.site).href,
+);
+const mailto = `mailto:${site.email}?subject=${encodeURIComponent(copy.subject)}`;
+---
+
+<button class="ping" type="button" popovertarget="ping" aria-label={copy.label}>
+  <span class="signal" aria-hidden="true"></span>
+</button>
+<div id="ping" popover class="sheet glass" aria-label={copy.label}>
+  <p class="who">
+    <span class="signal" aria-hidden="true"></span>
+    {site.name}
+  </p>
+  <p class="greeting">{copy.greeting}</p>
+  <ul class="ask" aria-label={copy.ask}>
+    {ask.map((link) => (
+      <li>
+        <a href={link.href} target="_blank" rel="noopener">
+          {copy.ask} {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p class="more">
+    <button type="button" class="copy" data-done={copy.copied} hidden>
+      {copy.copy}
+    </button>
+    <a href={mailto}>{copy.hello}</a>
+  </p>
+  <template id="briefing">{briefing}</template>
+</div>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#ping .copy');
+  const source = document.querySelector<HTMLTemplateElement>('#briefing');
+  if (button && source && navigator.clipboard) {
+    const label = button.textContent;
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(source.content.textContent ?? '');
+      button.textContent = button.dataset.done ?? label;
+      setTimeout(() => (button.textContent = label), 2000);
+    });
+  }
+</script>
+<style>
+  /* The live dot is also a door. It looks like status and nothing more. */
+  .ping {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin: -9px -9px -9px -9px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    cursor: default;
+  }
+  .ping .signal {
+    transition: box-shadow var(--motion) var(--ease);
+  }
+  /* A hairline ring, only for people who hover and look. Fine pointers only. */
+  @media (hover: hover) and (pointer: fine) {
+    .ping:hover .signal {
+      box-shadow: 0 0 0 2px oklch(0.67 0.19 33 / 0.32);
+    }
+  }
+  .ping:has(+ .sheet:popover-open) .signal {
+    animation: wake 900ms var(--ease);
+  }
+  @keyframes wake {
+    0% {
+      box-shadow: 0 0 0 0 oklch(0.67 0.19 33 / 0.6);
+    }
+    100% {
+      box-shadow: 0 0 0 14px oklch(0.67 0.19 33 / 0);
+    }
+  }
+
+  .sheet {
+    position: fixed;
+    inset: auto 0 max(1rem, env(safe-area-inset-bottom)) 0;
+    width: min(27rem, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: var(--space-5);
+    border-radius: 20px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--type-body);
+    line-height: 1.55;
+    letter-spacing: normal;
+    opacity: 0;
+    translate: 0 12px;
+    transition:
+      opacity var(--motion) var(--ease),
+      translate var(--motion) var(--ease),
+      display var(--motion) allow-discrete,
+      overlay var(--motion) allow-discrete;
+  }
+  .sheet:popover-open {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @starting-style {
+    .sheet:popover-open {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+  .sheet::backdrop {
+    background: oklch(0 0 0 / 0.3);
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 500;
+  }
+  .greeting {
+    margin-top: var(--space-2);
+    color: var(--text-2);
+  }
+  .ask {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+  .ask a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 var(--space-4);
+    border-radius: 999px;
+    background: oklch(1 0 0 / 0.08);
+    text-decoration: none;
+    font-size: var(--type-small);
+    font-weight: 500;
+  }
+  .more {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: var(--space-5);
+    margin-top: var(--space-3);
+    font-size: var(--type-small);
+  }
+  .more a,
+  .copy {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    color: var(--text-2);
+  }
+  .copy {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--line);
+  }
+  .copy[hidden] {
+    display: none;
+  }
+</style>

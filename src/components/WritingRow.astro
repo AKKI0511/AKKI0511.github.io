@@ -1,0 +1,58 @@
+---
+import { site } from '../data/site';
+import { formatMonth, writingHref, type WritingEntry } from '../lib/writing';
+interface Props {
+  entry: WritingEntry;
+}
+const { entry } = Astro.props;
+const { title, description, publishedAt, venue, example } = entry.data;
+---
+
+<li class="writing">
+  <h3 class="title">
+    <a href={writingHref(entry)}>{title}</a>
+  </h3>
+  <p class="meta aside">
+    {venue && <span>{venue}</span>}
+    {example && <span>{site.labels.example}</span>}
+    <time datetime={publishedAt.toISOString()}>{formatMonth(publishedAt)}</time>
+  </p>
+  <p class="summary">{description}</p>
+</li>
+<style>
+  .writing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+    align-items: baseline;
+    padding-block: var(--space-4);
+  }
+  .title {
+    font-size: var(--type-item);
+    line-height: 1.35;
+    font-weight: 500;
+    text-wrap: pretty;
+  }
+  .aside {
+    display: inline-flex;
+    gap: var(--space-3);
+  }
+  .summary {
+    grid-column: 1;
+    margin-top: var(--space-1);
+    color: var(--text-2);
+    max-width: 34rem;
+  }
+  @media (max-width: 760px) {
+    .writing {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .aside {
+      order: 1;
+      margin-top: var(--space-1);
+    }
+    .summary {
+      order: 2;
+    }
+  }
+</style>

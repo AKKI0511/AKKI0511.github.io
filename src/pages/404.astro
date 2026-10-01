@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Not found" noIndex>
+  <div class="page">
+    <section class="index missing">
+      <h1>{site.notFound.title}</h1>
+      <p>
+        <a href="/">{site.notFound.home}</a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .missing {
+    padding-top: var(--space-8);
+  }
+  h1 {
+    font-size: var(--type-title);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  p {
+    margin-top: var(--space-5);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+  }
+</style>
