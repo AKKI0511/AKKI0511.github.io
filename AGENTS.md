@@ -12,7 +12,7 @@ Akshat Joshi’s personal site. It shows his projects, his writing, and a short 
 - `src/components/` has `WorkRow`, `WritingRow`, `Ping` (the Now dot and its popover), and `ReadingDock` (the floating control on articles).
 - `src/pages/` has `/`, `/work/`, `/writing/`, `/writing/[id]/`, `/llms.txt`, `/llms-full.txt`, RSS, sitemap, robots, and 404.
 - `src/styles/tokens.css` is the design system. `global.css` has the base, the `.index` grid, `.signal`, and `.glass`. `prose.css` styles articles.
-- `public/social.png` is the link preview image. Regenerate it when the name, intro, or Now row changes.
+- `public/social-v2.png` is the link preview image. Regenerate it when the name, intro, or Now row changes. Change the filename when the image itself changes so caches pick up the new file.
 
 ## Page structure
 
