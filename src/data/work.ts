@@ -52,8 +52,7 @@ export const work: WorkItem[] = [
     title: 'Living Matter',
     tags: ['AI environments', '3D simulation', 'Real-time AI'],
     start: 2026,
-    summary:
-      'A 3D world that understands your intent and adapts around you.',
+    summary: 'A 3D world that understands your intent and adapts around you.',
     story: [
       'Most AI interfaces start with you telling a machine exactly what you want. I wanted to try the opposite.',
       'In Living Matter, you just move through the world. TypeSafe’s Jev System One model acts as its brain, watching your movement and deciding how a body of 512 pieces should reorganize into steps, bridges, and platforms around you.',
@@ -71,7 +70,8 @@ export const work: WorkItem[] = [
     tags: ['Coding agents', 'Quant finance', 'Research'],
     start: 2025,
     end: 2026,
-    summary: 'A quant research lab where coding agents run, compare, and improve trading experiments.',
+    summary:
+      'A quant research lab where coding agents run, compare, and improve trading experiments.',
     story: [
       'Coding agents can write a backtest pretty easily. The annoying part is everything after that.',
       'Each experiment usually ends up with different scripts, folders, metrics, and outputs, so comparing runs gets messy and the next session starts from scratch.',
@@ -162,6 +162,15 @@ export const earlier: EarlierItem[] = [
 ];
 
 export const isActive = (item: WorkItem) => item.end === 'now';
+
+/** Docs if they exist, otherwise the repository. For assistants, not Vercel demos. */
+export function sourceLink(item: WorkItem): SiteLink {
+  return (
+    item.links.find((link) => link.label === 'Docs') ??
+    item.links.find((link) => link.label === 'Repository') ??
+    item.links[0]
+  );
+}
 
 /** 2025– while active, 2025–26 for a range, 2025 for a single year. */
 export function workYears(item: WorkItem): string {

@@ -71,12 +71,12 @@ export const site = {
     label: 'Ping Akshat',
     greeting: 'Hey, you found me. Want your AI to brief you on me?',
     ask: 'Ask',
-    copy: 'Copy for any model',
+    copy: 'Copy full profile',
     copied: 'Copied',
     hello: 'Or just say hi',
     subject: 'Found the dot',
     question:
-      'I found the hidden dot on Akshat Joshi’s website. Brief me like a friend would. Who is he, what does he build, what is his best work, and where should I start?',
+      'Introduce Akshat to me like a mutual friend who knows both of us. Before answering, check his recent X posts and open the 1–2 project or writing links most relevant to me. Treat the profile below as a map. Use what you know about me to find genuine overlap. Tell me what I’d find interesting about him, why we might have something to talk about, and where I should start. Be specific, casual, and concise.',
   },
   notFound: {
     title: 'Nothing at this address.',

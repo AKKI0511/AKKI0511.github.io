@@ -139,20 +139,27 @@ test('the ping hands the site to an assistant and copies it exactly', async ({
     const href = await page
       .getByRole('link', { name: `Ask ${name}` })
       .getAttribute('href');
-    expect(decodeURIComponent(href!.split('?q=')[1])).toContain(index.trim());
+    const prompt = decodeURIComponent(href!.split('?q=')[1]);
+    expect(prompt).toContain(index.trim());
+    expect(prompt).toContain(
+      'Introduce Akshat to me like a mutual friend who knows both of us.',
+    );
+    expect(prompt).not.toContain('vercel.app');
   }
   const requests: string[] = [];
   page.on('request', (req) => requests.push(req.url()));
-  await page.getByRole('button', { name: 'Copy for any model' }).click();
+  await page.getByRole('button', { name: 'Copy full profile' }).click();
   await expect(page.locator('#ping .copy')).toHaveText('Copied');
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   // Some system clipboards rewrite line endings to CRLF.
   expect(copied.replaceAll('\r\n', '\n')).toBe(file);
   expect(requests).toEqual([]);
   for (const item of work) expect(file).toContain(`### ${item.title}`);
-  expect(file).toContain('Coinbase Builder Grant');
-  expect(file).toContain('livingmatter.vercel.app');
+  expect(file).toContain('github.com/AKKI0511/living-matter');
+  expect(file).not.toContain('vercel.app');
   expect(file).not.toContain('A place for unfinished thinking');
+  expect(index).not.toContain('vercel.app');
+  expect(index).toContain('akki0511.github.io/AgentConnect');
   expect(await (await request.get('/llms.txt')).text()).toContain(
     '/llms-full.txt',
   );

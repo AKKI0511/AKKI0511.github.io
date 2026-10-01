@@ -1,5 +1,5 @@
 import { site } from '../data/site';
-import { earlier, work, workYears } from '../data/work';
+import { earlier, work, workYears, sourceLink } from '../data/work';
 import {
   formatDate,
   getPublishedWriting,
@@ -28,7 +28,7 @@ export async function createIndex(origin: URL): Promise<string> {
     '',
     ...work.map(
       (item) =>
-        `- [${item.title}](${item.links[0].href}) (${workYears(item)}): ${item.summary}`,
+        `- [${item.title}](${sourceLink(item).href}) (${workYears(item)}): ${item.summary}`,
     ),
     '',
     '## Writing',
@@ -90,7 +90,9 @@ export async function createBriefing(origin: URL): Promise<string> {
       item.summary,
       '',
       ...item.story.flatMap((paragraph) => [paragraph, '']),
-      ...item.links.map((link) => `- ${link.label}: ${link.href}`),
+      ...item.links
+        .filter((link) => !link.href.includes('vercel.app'))
+        .map((link) => `- ${link.label}: ${link.href}`),
     );
   }
 
